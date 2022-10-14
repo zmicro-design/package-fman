@@ -29,7 +29,11 @@ install() {
   local tmp_file=/tmp/$name.tar.gz
   # reference: https://github.com/nore-dev/fman/releases
   # example: https://github.com/nore-dev/fman/releases/download/v1.17.1/fman_1.17.1_Darwin_arm64.tar.gz
-  local url="https://github.com/nore-dev/fman/releases/download/$VERSION/${name}_${VERSION#v}_${os}_${arch}.tgz"
+  local url="https://github.com/nore-dev/fman/releases/download/$VERSION/${name}_${VERSION#v}_${os}_${arch}.tar.gz"
+  if [ "$DEBUG" = "true" ]; then
+    echo "url: $url"
+  fi
+
   os::curl -fSL $url -o $tmp_file
 
   cd /tmp
