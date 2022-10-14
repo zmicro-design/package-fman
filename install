@@ -21,7 +21,7 @@ install() {
   fi
 
   if [ "$arch" = "amd64" ]; then
-    arch="x86-64"
+    arch="x86_64"
   fi
 
   local name="fman"
