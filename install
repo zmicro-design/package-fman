@@ -1,0 +1,63 @@
+#!/bin/bash
+
+VERSION=v1.17.1
+
+set -e
+
+help() {
+  echo "Usage:"
+  echo "  zmicro package install fman <args...>"
+  echo ""
+}
+
+install() {
+  local arch="$(os::arch)"
+  local os="Linux"
+  local bin_path=/usr/bin
+
+  if [ "$(os::is_macos)" = "true" ]; then
+    os="Darwin"
+    bin_path=/usr/local/bin
+  fi
+
+  if [ "$arch" = "amd64" ]; then
+    arch="x86-64"
+  fi
+
+  local name="fman"
+
+  local tmp_file=/tmp/$name.tar.gz
+  # reference: https://github.com/nore-dev/fman/releases
+  # example: https://github.com/nore-dev/fman/releases/download/v1.17.1/fman_1.17.1_Darwin_arm64.tar.gz
+  local url="https://github.com/nore-dev/fman/releases/download/$VERSION/${name}_${VERSION#v}_${os}_${arch}.tgz"
+  os::curl -fSL $url -o $tmp_file
+
+  cd /tmp
+  tar -zxvf $tmp_file >>/dev/null 2>&1
+
+  sudo mv fman $bin_path/$name
+
+  rm -rf $tmp_file
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  install
+  if [ $? -eq 0 ]; then
+    log::success "install fman success."
+    exit 0
+  else
+    log::error "install fman failed."
+    exit 1
+  fi
+}
+
+run() {
+  core $@
+}
+
+run $@

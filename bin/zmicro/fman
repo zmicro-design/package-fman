@@ -1,0 +1,17 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zmicro fman <args ...>"
+  echo ""
+}
+
+core() {
+  fman "$@"
+}
+
+run() {
+  core "$@"
+}
+
+run "$@"
